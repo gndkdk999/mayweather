@@ -1,14 +1,15 @@
-# Instagram clone in Django
-
-Basic Instagram clone website built in django web framework using Python. 
 
 ## Getting Started
 
--Install the prerequisites
--Run the server
+1. cmd창을 연다.
+2. 가상 환경을 작동시킨다.
+3. mayweather 폴더에 들어가 서버를 연다.
+4. 127.0.0.1:8000/user/login 으로 들어간다.
+5. 홈페이지를 사용한다.
 
 admin:
 tthwaa
+
 password:
 1234
 
