@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+        
+{% block content %}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>프로필 변경</h1>
+  </div><!-- End Page Title -->
+
+<section class="section dashboard">
+<div class="columns is-mobile">
+  <div class="column is-half is-offset-one-quarter">
+
+    <div class="card">
+    <div class="card-content">
+
+    <form method="post" enctype="multipart/form-data" action="" role="form">
+      {% csrf_token %}
+    <h3 class="title is-3">프로필 편집</h3>
+
+          <div class="field">
+              <label class="label is-medium">사진을 선택하세요</label>
+              <div class="file is-boxed">
+                {{ form.picture }}
+              </div>
+          </div>
+
+          <div class="field">
+              <label class="label is-medium">성</label>
+              <div class="control">
+                {{ form.first_name }}
+              </div>
+          </div>
+
+          <div class="field">
+              <label class="label is-medium">이름</label>
+              <div class="control">
+                {{ form.last_name }}
+              </div>
+          </div>
+
+      <div class="row">
+        <div class="col s12">
+          <span style="color: red; font-weight: bold;">{{ form.errors }}</span>
+        </div>
+      </div>
+
+
+      <div class="field">
+      <p class="control">
+        <button type="submit" value="login" class="button is-success">
+          업데이트
+        </button>
+      </p>
+    </div>
+
+    </form>
+  </div>
+</div>
+
+  </div>
+</div>
+</section>
+</main>
+{% endblock %}

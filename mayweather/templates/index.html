@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+
+    </script>
+{% endblock %}  
+{% block content %}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>피드</h1>
+  </div><!-- End Page Title -->
+
+ <section class="section dashboard">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-offset-4 is-4">
+                    <div class="box">
+                        <article class="media">
+                            <div class="media-left">
+                                <figure class="image is-50x50">
+                                    <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p>
+                                        <span class="title">{{ weather.city }}</span>
+                                        <br>
+                                        <span class="subtitle">{{ weather.temperature }}° C</span>
+                                        <br> {{ weather.description }}
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<section class="section dashboard">
+{% for post_item in post_items %}
+  <div class="card">
+  <div class="card-image">
+
+  {% if post_item.content.first.file.name|slice:"-3:" == 'jpg' or post_item.content.first.file.name|slice:"-3:" == 'png' or post_item.content.first.file.name|slice:"-3:" == 'heic' %}
+    <figure class="image is-5by3">
+      <a href="{{ post_item.get_absolute_url }}">
+        <img src="{{ post_item.content.first.file.url }}" alt="Placeholder image">
+      </a>
+    </figure>
+  {% else %}
+    <a href="{{ post_item.get_absolute_url }}">
+      <video width="1080" controls="controls" preload="metadata">
+        <source src="{{ post_item.content.first.file.url }}#t=0.5" type="video/mp4">        
+      </video>      
+    </a>
+  {% endif %}
+
+  </div>
+  <div class="card-content">
+    <div class="media">
+      <div class="media-left">
+        <figure class="image is-48x48">
+          {% if post_item.user.profile.picture %}
+            <img src="{{ post_item.user.profile.picture.url }}" alt="Placeholder image">
+          {% else %}
+            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+          {% endif %}
+        </figure>
+      </div>
+      <div class="media-content">
+        {% if post_item.user.profile.first_name %}
+          <a href="{% url 'profile' post_item.user %}"><p class="title is-4">{{ post_item.user.profile.first_name }} {{ post_item.user.profile.last_name }}</p></a>
+        {% else %}
+          <a href="{% url 'profile' post_item.user %}"><p class="title is-4">Unknown</p></a>
+        {% endif %}
+
+        <p class="subtitle is-6">@{{ post_item.user.username }}</p>
+
+      {{ post_item.caption }}
+      <p>{% for tag in post_item.tags.all %}<a href="{{ tag.get_absolute_url }}">#{{ tag }}</a>{% endfor %}</p>
+      <br>
+      <strong><small>{{ post_item.posted | naturaltime }}</small></strong>
+      </div>
+    
+
+    <div class="media-right">
+      <a href="{% url 'postlike' post_item.id %}"><i class="bi bi-heart-fill"></i></a>
+      <p>{{ post_item.likes }} 좋아요</p>  
+    </div>
+
+</div>
+
+
+
+  </div>
+</div>
+
+<br>
+
+{% endfor %}
+
+</div>
+</div>
+</section>
+</main>
+{% endblock content %}

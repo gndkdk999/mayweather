@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>사람 찾기</h1>
+  </div><!-- End Page Title -->
+
+<section class="section dashboard">
+
+<div class="field has-addons">
+<form>
+  <div class="control">
+    <input class="from-control" name="q" type="text" placeholder="대화를 원하는 닉네임" value="{{ request.GET.q }}">
+  </div>
+  <div class="control">
+  	<button type="submit" class="btn btn-outline-success">검색</button>
+  </div>
+  </form>
+</div>
+
+
+<div class="column is-one-quarter">
+
+{% for user in users %}
+<div class="box">
+  <article class="media">
+    <div class="media-left">
+      <figure class="image is-64x64">
+          {% if user.profile.picture %}
+            <img src="{{ user.profile.picture.url }}" alt="Placeholder image">
+          {% else %}
+            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+          {% endif %}
+      </figure>
+    </div>
+    <div class="media-content">
+      <div class="content">
+        <p>
+          <strong>{{ user.profile.first_name }} {{ user.profile.last_name }}</strong><small>@{{ user.username }}</small>
+        </p>
+        <a href="{% url 'newconversation' user.username %}" class="btn btn-outline-primary">대화하기</a>
+      </div>
+    </div>
+  </article>
+</div>
+{% endfor %}
+	
+
+</div>
+</section>
+</main>
+{% endblock %}

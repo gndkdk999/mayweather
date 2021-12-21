@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>알림</h1>
+  </div><!-- End Page Title -->
+
+<section class="section dashboard">
+
+    <div class="columns is-mobile is-centered">
+    <div class="column is-half">
+
+
+{% for notification in notifications %}
+
+
+{% if notification.notification_type == 2 %}
+      <div class="notification">
+      <a href="{% url 'delete-notification' notification.id %}" class="delete"></a>
+
+      <article class="media">
+  <figure class="media-left">
+    <p class="image is-64x64">
+        {% if notification.sender.profile.picture %}
+            <img src="{{ notification.sender.profile.picture.url }}" alt="Placeholder image">
+          {% else %}
+            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+        {% endif %}
+    </p>
+  </figure>
+  <div class="media-content">
+    <div class="content">
+        <strong>{{ notification.sender.profile.first_name }} {{ notification.sender.profile.last_name }}</strong> <small>@{{ notification.sender.username }}</small> 
+        <br>
+        Commented:
+      <p>{{ notification.text_preview }}</p>
+        <strong><small>{{ notification.date|naturaltime }}</small></strong>
+    </div>
+  </div>
+
+  <div class="media-right">
+    <figure class="image is-128x128">
+      <img src="{{ notification.post.picture.url }}">
+  </figure>
+  </div>
+</article>
+
+      </div>
+{% endif %}
+
+
+{% if notification.notification_type == 3 %}
+      <div class="notification">
+      <a href="{% url 'delete-notification' notification.id %}" class="delete"></a>
+
+      <article class="media">
+  <figure class="media-left">
+    <p class="image is-64x64">
+          {% if notification.sender.profile.picture %}
+            <img src="{{ notification.sender.profile.picture.url }}" alt="Placeholder image">
+          {% else %}
+            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+        {% endif %}
+    </p>
+  </figure>
+  <div class="media-content">
+    <div class="content">
+        <strong>{{ notification.sender.profile.first_name }} {{ notification.sender.profile.last_name }}</strong> <small>@{{ notification.sender.username }}</small> 
+        <br>
+        <p><i class="bi bi-person-plus"></i> 당신을 팔로우했습니다!</p>
+        <strong><small>{{ notification.date|naturaltime }}</small></strong>
+    </div>
+  </div>
+
+</article>
+
+      </div>
+{% endif %}
+
+
+<!-- FOR LIKE --->
+{% if notification.notification_type == 1 %}
+      <div class="notification">
+      <a href="{% url 'delete-notification' notification.id %}" class="delete"></a>
+
+      <article class="media">
+  <figure class="media-left">
+    <p class="image is-64x64">
+        {% if notification.sender.profile.picture %}
+            <img src="{{ notification.sender.profile.picture.url }}" alt="Placeholder image">
+          {% else %}
+            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+        {% endif %}
+    </p>
+  </figure>
+  <div class="media-content">
+    <div class="content">
+        <strong>{{ notification.sender.profile.first_name }} {{ notification.sender.profile.last_name }}</strong> <small>@{{ notification.sender.username }}</small> 
+        <br>
+        <p><i class="bi bi-hand-thumbs-up-fill"></i> 당신의 게시물에 좋아요를 눌렀습니다!</p>
+        <strong><small>{{ notification.date|naturaltime }}</small></strong>
+    </div>
+  </div>
+
+  <div class="media-right">
+    <figure class="image is-128x128">
+      <img src="{{ notification.post.picture.url }}">
+  </figure>
+  </div>
+</article>
+
+      </div>
+{% endif %}
+
+
+{% endfor %}
+<!-- FOR LIKES --->
+
+
+
+    </div>
+    </div>
+
+  </section>
+</main>
+{% endblock %}

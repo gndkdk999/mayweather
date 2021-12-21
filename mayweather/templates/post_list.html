@@ -1,0 +1,93 @@
+<!-- ing Modal -->
+<div class="modal fade" id="FollowingModalScrollable" tabindex="-1" role="dialog"
+  aria-labelledby="FollowingModalScrollableTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="modal-title" id="FollowingModalScrollableTitle">팔로잉</p>
+        <!-- close_btn -->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- 팔로잉 유저 리스트 -->
+        <div class="following_user_form">
+          <!-- 프로필사진, 팔로우 아이디, 메세지, 팔로잉, 팔로우 버튼-->
+          {% for ing in ingList %}
+            <div>
+          <div class="following_info">
+            <div class="following_user_img">
+              {% if ing.profile_img_src == "" %}
+                <img src="{% static 'images/login.png' %}">
+              {% else %}
+                <img src="{{ ing.profile_img_src }}">
+              {% endif %}
+            </div>
+            <div class="id_message">
+              <div class="following_id">
+                <a href="{% url 'instagram:postlist' ing.following_id %}">{{ing.following_id}}</a>
+              </div>
+              <div class="following_id_message">{{ing.profile_msg}}</div>
+            </div>
+
+          <div class="following_btn">
+            {% if user.is_authenticated %}
+              {% if ing.following_id != user.username %}
+                {% if ing.havefollow == 0 %} <!--안한 경우 팔로우 버튼-->
+                  <button type="button" class="btn btn-primary" id="follow_btn" onclick="follow(this, '{{ing.following_id}}')">팔로우</button>
+                {% elif ing.havefollow == 1 %} <!--한 경우 팔로잉 버튼-->
+                  <button type="button" class="btn btn-light" id="follow_btn" onclick="unfollow(this, '{{ing.following_id}}')">팔로잉</button>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          </div>
+          </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal End -->
+...
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function follow(elm, n) {
+        $.ajax({
+            url: "{% url 'instagram:follow' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "btn btn-light");
+                $(elm).attr("onclick", "unfollow(this, '" + n + "')");
+                $(elm).text("팔로잉");
+                $("#followerCount").text(response.followerCount);
+            },
+            error: function(xhr) {
+                alert("팔로우를 하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+
+    function unfollow(elm, n) {
+        $.ajax({
+            url: "{% url 'instagram:unfollow' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "btn btn-primary");
+                $(elm).attr("onclick", "follow(this, '" + n + "')");
+                $(elm).text("팔로우");
+                $("#followerCount").text(response.followerCount);
+            },
+            error: function(xhr) {
+                alert("언팔로우 하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+
+</script>
